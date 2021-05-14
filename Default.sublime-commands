@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Move View: Next",
+        "command": "move_view_next"
+    },
+    {
+        "caption": "Move View: Prev",
+        "command": "move_view_prev"
+    }
+]
