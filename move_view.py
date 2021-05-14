@@ -2,8 +2,16 @@ import sublime
 import sublime_plugin
 
 
+PLUGIN_ENABLED = True
+
+
 class MoveViewNext(sublime_plugin.WindowCommand):
     def run(self) -> None:
+        if not PLUGIN_ENABLED:
+            # match the default behavior when not enabled
+            self.window.run_command("next_view")
+            return
+
         sheet = self.window.active_sheet()
         if sheet is None:
             return
@@ -39,6 +47,11 @@ class MoveViewNext(sublime_plugin.WindowCommand):
 
 class MoveViewPrev(sublime_plugin.WindowCommand):
     def run(self) -> None:
+        if not PLUGIN_ENABLED:
+            # match the default behavior when not enabled
+            self.window.run_command("prev_view")
+            return
+
         sheet: sublime.Sheet = self.window.active_sheet()
         if sheet is None:
             return
@@ -71,3 +84,22 @@ class MoveViewPrev(sublime_plugin.WindowCommand):
                 if len(sheets) > 0:
                     self.window.focus_sheet(sheets[len(sheets) - 1])
                     return
+
+
+def on_settings_update() -> None:
+    global PLUGIN_ENABLED
+    enabled = True
+    try:
+        settings = sublime.load_settings("MoveView.sublime-settings")
+        if settings:
+            settings.clear_on_change("MoveView")
+            settings.add_on_change("MoveView", on_settings_update)
+            enabled = settings.get("move_view_enabled") is not False
+    except Exception as e:
+        raise e
+    finally:
+        PLUGIN_ENABLED = enabled
+
+
+def plugin_loaded() -> None:
+    on_settings_update()
