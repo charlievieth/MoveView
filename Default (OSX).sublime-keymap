@@ -1,4 +1,6 @@
 [
 	{ "keys": ["super+shift+["], "command": "move_view_prev" },
-	{ "keys": ["super+shift+]"], "command": "move_view_next" }
+	{ "keys": ["super+shift+]"], "command": "move_view_next" },
+	{ "keys": ["ctrl+pagedown"], "command": "move_view_next" },
+	{ "keys": ["ctrl+pageup"], "command": "move_view_prev" }
 ]
