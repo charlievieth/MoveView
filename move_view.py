@@ -16,17 +16,19 @@ class MoveViewNext(sublime_plugin.WindowCommand):
         if sheet is None:
             return
 
+        # CEV: idx == -1 if there are no sheets in the group
+        # for example an empy pane after a split
         group, idx = self.window.get_sheet_index(sheet)
-        if group == -1 or idx == -1:
+        if group == -1:
             return
 
         num_groups = self.window.num_groups()
         sheets = self.window.sheets_in_group(group)
 
-        if idx < len(sheets) - 1:
+        if idx >= 0 and idx < len(sheets) - 1:
             self.window.focus_sheet(sheets[idx + 1])
         elif num_groups == 1:
-            if idx != 0:
+            if idx > 0:
                 self.window.focus_sheet(sheets[0])
         else:
             # search through the groups to the right then end
@@ -57,7 +59,7 @@ class MoveViewPrev(sublime_plugin.WindowCommand):
             return
 
         group, idx = self.window.get_sheet_index(sheet)
-        if group == -1 or idx == -1:
+        if group == -1:
             return
 
         num_groups = self.window.num_groups()
@@ -67,7 +69,7 @@ class MoveViewPrev(sublime_plugin.WindowCommand):
             self.window.focus_sheet(sheets[idx - 1])
         elif num_groups == 1:
             idx = len(sheets) - 1
-            if idx != 0:
+            if idx > 0:
                 self.window.focus_sheet(sheets[idx])
         else:
             # search through the groups to the left then end
